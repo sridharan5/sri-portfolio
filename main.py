@@ -1,0 +1,41 @@
+from flask import Flask,render_template,request
+import smtplib,ssl
+
+app = Flask(__name__)
+
+smtpServer = "smtp.gmail.com"
+port = 587
+myEmail = "kjkk"
+password = "k"
+
+@app.route("/")
+def home():
+    return render_template("index.html")
+@app.route("/status", methods=['POST','GET'])
+def contact():
+    print("contacted")
+    if request.method == "POST":
+        name = request.form.get('name')
+        email = request.form.get('email')
+        phone_number = request.form.get('phone')
+        message = request.form.get('message')
+        # print(f"{type(name)} {type(email)} {type(phone_number)} {type(message)}")
+        context = ssl.create_default_context()
+        msg = f"""Message from your Portfolio, 
+        Name: {name}, 
+        Email: {email}, 
+        Phone number: {phone_number},
+         Message: {message}"""
+        try:
+            server = smtplib.SMTP(smtpServer, port)
+            server.starttls(context=context)
+            server.login(myEmail, password)
+            server.sendmail(from_addr=myEmail,to_addrs=myEmail,msg=msg)
+        except Exception as e:
+            print("the email could not be sent.")
+        finally:
+            server.quit()
+    return render_template()
+
+if __name__ == "__main__":
+    app.run(debug=True)
