@@ -14,13 +14,11 @@ def home():
     return render_template("index.html")
 @app.route("/status", methods=['POST','GET'])
 def contact():
-    print("contacted")
     if request.method == "POST":
         name = request.form.get('name')
         email = request.form.get('email')
         phone_number = request.form.get('phone')
         message = request.form.get('message')
-        # print(f"{type(name)} {type(email)} {type(phone_number)} {type(message)}")
         context = ssl.create_default_context()
         msg = f"""Message from your Portfolio, 
         Name: {name}, 
