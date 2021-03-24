@@ -9,9 +9,6 @@ port = 587
 myEmail = os.environ.get("MAIL")
 password = os.environ.get("PASS")
 
-print(myEmail)
-print(password)
-
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -33,12 +30,12 @@ def contact():
             server.starttls(context=context)
             server.login(myEmail, password)
             server.sendmail(from_addr=myEmail,to_addrs=myEmail,msg=msg)
-            return render_template("success.html")
         except Exception as e:
             print("the email could not be sent.")
         finally:
             server.quit()
-    return render_template("index.html")
+    return render_template("success.html")
+
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
