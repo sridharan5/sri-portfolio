@@ -1,12 +1,13 @@
 from flask import Flask,render_template,request
 import smtplib,ssl
+import os
 
 app = Flask(__name__)
 
 smtpServer = "smtp.gmail.com"
 port = 587
-myEmail = "kjkk"
-password = "k"
+myEmail = os.environ.get("MAIL")
+password = os.environ.get("PASS")
 
 @app.route("/")
 def home():
@@ -31,11 +32,12 @@ def contact():
             server.starttls(context=context)
             server.login(myEmail, password)
             server.sendmail(from_addr=myEmail,to_addrs=myEmail,msg=msg)
+            return render_template("success.html")
         except Exception as e:
             print("the email could not be sent.")
         finally:
             server.quit()
-    return render_template()
+    return render_template("index.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
